@@ -2,6 +2,8 @@
 
 set -e
 
+PATH=$PATH:$(echo ./flyway-* | cut -d' ' -f1)
+
 app_name="${1:-pal-tracker}"
 script_dir="${2:-.}"
 service_name="${3:-tracker-database}"
@@ -36,7 +38,7 @@ function main() {
 
     echo "Running migration ..."
 
-    flyway-*/flyway -url="jdbc:mysql://127.0.0.1:63306/$db_name" \
+    flyway -url="jdbc:mysql://127.0.0.1:63306/$db_name" \
         -locations=filesystem:"$script_dir"/databases/tracker \
         -user="$db_username" \
         -password="$db_password" \
