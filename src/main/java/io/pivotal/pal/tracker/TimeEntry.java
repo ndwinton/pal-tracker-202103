@@ -1,9 +1,14 @@
 package io.pivotal.pal.tracker;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Table("time_entries")
 public class TimeEntry {
+    @Id
     private final long id;
     private final long projectId;
     private final long userId;
