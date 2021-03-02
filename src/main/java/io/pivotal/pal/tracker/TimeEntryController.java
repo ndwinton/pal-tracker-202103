@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,8 @@ public class TimeEntryController {
 
     @PostMapping
     public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
-        return new ResponseEntity<>(timeEntryRepository.create(timeEntryToCreate), HttpStatus.CREATED);
+        var created = timeEntryRepository.create(timeEntryToCreate);
+        return ResponseEntity.created(URI.create("/time-entries/" + created.getId())).body(created);
     }
 
     @GetMapping("/{id}")
