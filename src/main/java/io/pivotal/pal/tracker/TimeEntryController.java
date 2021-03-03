@@ -16,7 +16,7 @@ public class TimeEntryController {
         this.timeEntryRepository = timeEntryRepository;
     }
 
-    @PostMapping
+    @PostMapping({"", "/"})
     public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
         var created = timeEntryRepository.create(timeEntryToCreate);
         return ResponseEntity.created(URI.create("/time-entries/" + created.getId())).body(created);
@@ -32,7 +32,7 @@ public class TimeEntryController {
         }
     }
 
-    @GetMapping
+    @GetMapping({"", "/"})
     public ResponseEntity<List<TimeEntry>> list() {
         return ResponseEntity.ok(timeEntryRepository.list());
     }
