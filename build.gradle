@@ -50,6 +50,10 @@ flyway {
     locations = ["filesystem:databases/tracker/migrations"]
 }
 
+task devMigrate(type: FlywayMigrateTask) {
+    url = developmentDbUrl
+}
+
 task testMigrate(type: FlywayMigrateTask) {
     url = testDbUrl
 }
