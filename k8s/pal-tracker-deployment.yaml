@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: pal-tracker
+  name: pal-tracker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pal-tracker
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: pal-tracker
+    spec:
+      containers:
+      - image: pal-tracker:v1
+        name: pal-tracker
+        resources: {}
+        env:
+          - name: WELCOME_MESSAGE
+            value: Hello from Kubernetes
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:mysql://mysql:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: pal-tracker
+  name: pal-tracker
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: pal-tracker
+status:
+  loadBalancer: {}
