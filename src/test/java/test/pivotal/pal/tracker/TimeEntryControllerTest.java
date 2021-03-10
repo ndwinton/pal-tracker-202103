@@ -1,5 +1,6 @@
 package test.pivotal.pal.tracker;
 
+import io.pivotal.pal.tracker.StatsCollector;
 import io.pivotal.pal.tracker.TimeEntry;
 import io.pivotal.pal.tracker.TimeEntryController;
 import io.pivotal.pal.tracker.TimeEntryRepository;
@@ -20,11 +21,19 @@ import static org.mockito.Mockito.*;
 public class TimeEntryControllerTest {
     private TimeEntryRepository timeEntryRepository;
     private TimeEntryController controller;
+    private StatsCollector statsCollector;
 
     @BeforeEach
     public void setUp() {
         timeEntryRepository = mock(TimeEntryRepository.class);
-        controller = new TimeEntryController(timeEntryRepository);
+        statsCollector = new StatsCollector() {
+            @Override
+            public void record(String action) {
+                // Do nothing
+            }
+        };
+
+        controller = new TimeEntryController(timeEntryRepository, statsCollector);
     }
 
     @Test
