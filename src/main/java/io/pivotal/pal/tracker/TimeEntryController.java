@@ -10,23 +10,23 @@ import java.util.List;
 @RequestMapping("/time-entries")
 public class TimeEntryController {
     private final TimeEntryRepository timeEntryRepository;
-    private final StatsCollector statsCollector;
+    private final TimeEntryStatsCollector statsCollector;
 
-    public TimeEntryController(TimeEntryRepository timeEntryRepository, StatsCollector statsCollector) {
+    public TimeEntryController(TimeEntryRepository timeEntryRepository, TimeEntryStatsCollector statsCollector) {
         this.timeEntryRepository = timeEntryRepository;
         this.statsCollector = statsCollector;
     }
 
     @PostMapping({"", "/"})
     public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
-        statsCollector.record("create");
+        statsCollector.record(TimeEntryStatsCollector.Action.CREATE);
         var created = timeEntryRepository.create(timeEntryToCreate);
         return ResponseEntity.created(URI.create("/time-entries/" + created.getId())).body(created);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TimeEntry> read(@PathVariable("id") long timeEntryId) {
-        statsCollector.record("read");
+        statsCollector.record(TimeEntryStatsCollector.Action.READ);
         TimeEntry found = timeEntryRepository.find(timeEntryId);
         if (found != null) {
             return ResponseEntity.ok(found);
@@ -37,13 +37,13 @@ public class TimeEntryController {
 
     @GetMapping({"", "/"})
     public ResponseEntity<List<TimeEntry>> list() {
-        statsCollector.record("list");
+        statsCollector.record(TimeEntryStatsCollector.Action.LIST);
         return ResponseEntity.ok(timeEntryRepository.list());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TimeEntry> update(@PathVariable("id") long timeEntryId, @RequestBody TimeEntry timeEntryToUpdate) {
-        statsCollector.record("update");
+        statsCollector.record(TimeEntryStatsCollector.Action.UPDATE);
         TimeEntry updated = timeEntryRepository.update(timeEntryId, timeEntryToUpdate);
         if (updated != null) {
             return ResponseEntity.ok(updated);
@@ -54,7 +54,7 @@ public class TimeEntryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") long timeEntryId) {
-        statsCollector.record("delete");
+        statsCollector.record(TimeEntryStatsCollector.Action.DELETE);
         timeEntryRepository.delete(timeEntryId);
         return ResponseEntity.noContent().build();
     }
