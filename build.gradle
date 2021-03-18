@@ -5,6 +5,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id "org.flywaydb.flyway" version "7.3.0"
     id 'java'
+    id "com.gorylenko.gradle-git-properties" version "2.2.4"
 }
 
 repositories {
@@ -32,6 +33,7 @@ bootRun.environment([
         "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
         "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
         "MANAGEMENT_HEALTH_PROBES_ENABLED": true,
+        "MANAGEMENT_INFO_GIT_MODE": "FULL",
 ])
 
 def testDbUrl = "jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
@@ -41,6 +43,7 @@ test.environment([
         "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
         "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
         "MANAGEMENT_HEALTH_PROBES_ENABLED": true,
+        "MANAGEMENT_INFO_GIT_MODE": "FULL",
 ])
 
 flyway {
@@ -60,4 +63,9 @@ task testMigrate(type: FlywayMigrateTask) {
 
 springBoot {
     buildInfo()
+}
+
+// Customize Git properties plugin.
+gitProperties {
+    customProperty 'pal-info', 'Course of 2021-03-15'
 }
